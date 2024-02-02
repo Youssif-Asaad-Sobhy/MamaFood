@@ -1,10 +1,14 @@
-﻿namespace MamaFood.API.Domain.Entities
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace MamaFood.API.Domain.Entities
 {
     public class UserFavorite
     {
         public int ID { get; set; }
+        [ForeignKey("User")]
         public int UserID { get; set; }
-        ICollection<User> BaseUsers { get; set; }
-        ICollection<UserFood> UserFoods { get; set; }
+        public User? User { get; set; }
+        ICollection<User>? Users { get; set; }
+        ICollection<UserFood>? UserFoods { get; set; }
     }
 }
