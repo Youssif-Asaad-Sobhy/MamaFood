@@ -16,5 +16,6 @@ namespace MamaFood.API.Domain.Entities
         public string? Description { get; set; }
         public Food? Food { get; set; }
         public User? User { get; set; }
+        public ICollection<OrderUserFood> OrderUserFoods { get; set; }
     }
 }

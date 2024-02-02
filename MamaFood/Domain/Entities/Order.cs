@@ -14,6 +14,6 @@ namespace MamaFood.API.Domain.Entities
         [ForeignKey("Review")]
         public int ReviewID { get; set; }
         public Review? Review { get; set; }
-        public ICollection<OrderFood> OrderFoods { get; set; }
+        public ICollection<OrderUserFood> OrderUserFoods { get; set; }
     }
 }

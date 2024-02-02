@@ -3,13 +3,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MamaFood.API.Domain.Entities
 {
-    public class OrderFood
+    public class OrderUserFood
     {
         public int ID { get; set; }
         [Required, Range(1,100)]
         public int Quantity { get; set; }
         [ForeignKey("UserFood")]
-        public int FoodID { get; set; }
+        public int UserFoodID { get; set; }
         [ForeignKey("Order")]
         public int OrderID { get; set; }
         public UserFood? UserFood { get; set; }
