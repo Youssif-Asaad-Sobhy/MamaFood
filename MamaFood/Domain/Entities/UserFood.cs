@@ -8,14 +8,14 @@ namespace MamaFood.API.Domain.Entities
         public int ID { get; set; }
         [ForeignKey("Food")]
         public int FoodID { get; set; }
-        [ForeignKey("User")]
-        public int UserID { get; set; }
+        [Required ,ForeignKey("User")]
+        public required string UserID { get; set; }
         [Required]
         public double Price {  get; set; }
         [StringLength(200)]
         public string? Description { get; set; }
-        public Food? Food { get; set; }
-        public User? User { get; set; }
+        public required Food Food { get; set; }
+        public required ApplicationUser User { get; set; }
         public ICollection<OrderUserFood> OrderUserFoods { get; set; }
     }
 }

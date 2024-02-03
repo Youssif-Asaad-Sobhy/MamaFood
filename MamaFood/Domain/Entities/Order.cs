@@ -6,14 +6,16 @@ namespace MamaFood.API.Domain.Entities
     public class Order
     {
         public int ID { get; set; }
-        [Required,DataType(DataType.DateTime)]
+        [Required]
         public DateTime DateTime { get; set; }
-        [ForeignKey("User")]
-        public int UserID { get; set; }
-        public User? User { get; set; }
-        [ForeignKey("Review")]
-        public int ReviewID { get; set; }
+
+        #region Foreign Keys
+        public required string UserID { get; set; }
+        #endregion
+        #region Navigation Property
+        public required ApplicationUser User { get; set; }
         public Review? Review { get; set; }
-        public ICollection<OrderUserFood> OrderUserFoods { get; set; }
+        public required ICollection<OrderUserFood> OrderUserFoods { get; set; }
+        #endregion
     }
 }

@@ -3,8 +3,8 @@
     public static class UserRoles
     {
         public const string Admin = "Admin";
-        public const string FoodProvider = "FoodProvider";
-        public const string FoodConsumer = "FoodConsumer";
+        public const string FoodProvider = "Food Provider";
+        public const string FoodConsumer = "Food Consumer";
         public const string Delivery = "Delivery";
     }
 }

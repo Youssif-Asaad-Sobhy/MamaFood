@@ -10,9 +10,9 @@ namespace MamaFood.API.Domain.Entities
         public int Quantity { get; set; }
         [ForeignKey("UserFood")]
         public int UserFoodID { get; set; }
-        [ForeignKey("Order")]
+        [Required, ForeignKey("Order")]
         public int OrderID { get; set; }
-        public UserFood? UserFood { get; set; }
-        public Order? Order { get; set; }
+        public required UserFood UserFood { get; set; }
+        public required Order Order { get; set; }
     }
 }
