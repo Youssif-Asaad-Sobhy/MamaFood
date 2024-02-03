@@ -6,16 +6,12 @@ namespace MamaFood.API.Domain.Entities
     public class UserFood
     {
         public int ID { get; set; }
-        [ForeignKey("Food")]
-        public int FoodID { get; set; }
-        [Required ,ForeignKey("User")]
-        public required string UserID { get; set; }
-        [Required]
         public double Price {  get; set; }
-        [StringLength(200)]
-        public string? Description { get; set; }
-        public required Food Food { get; set; }
-        public required ApplicationUser User { get; set; }
+        public string Description { get; set; }
+        public int FoodID { get; set; }
+        public string UserID { get; set; }
+        public Food Food { get; set; }
+        public ApplicationUser User { get; set; }
         public ICollection<OrderUserFood> OrderUserFoods { get; set; }
     }
 }

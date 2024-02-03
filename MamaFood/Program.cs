@@ -1,10 +1,12 @@
 using MamaFood.API.Domain.Entities;
 using MamaFood.API.Infrastructure.Contexts;
+using MamaFood.API.Infrastructure.UnitOfWork;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Reflection.Emit;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,7 +21,7 @@ builder.Services.AddSwaggerGen();
 // Add services to the container.
 var db = builder.Configuration.GetConnectionString("Default Connection");
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(db));
-
+builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
 #region authentication&autherization
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>();
@@ -85,7 +87,7 @@ builder.Services.AddSwaggerGen(opt =>
 
 var app = builder.Build();
 
-AppDbInitializer.SeedUsersAndRolesAsync(app).Wait();
+ //ppDbInitializer.SeedUsersAndRolesAsync(app).Wait();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

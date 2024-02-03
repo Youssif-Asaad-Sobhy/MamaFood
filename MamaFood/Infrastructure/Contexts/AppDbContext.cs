@@ -22,62 +22,15 @@ namespace MamaFood.API.Infrastructure.Contexts
             modelBuilder.Entity<IdentityUserToken<string>>()
                 .HasKey(t => new { t.UserId, t.LoginProvider, t.Name });
 
-            modelBuilder.Entity<ApplicationUser>()
-                .HasMany(r => r.Reviews)
-                .WithOne(u => u.User)
-                .HasForeignKey(f => f.Creator)
-                .OnDelete(DeleteBehavior.Cascade);
-            modelBuilder.Entity<ApplicationUser>()
-                .HasMany(o => o.Orders)
-                .WithOne(u => u.User)
-                .HasForeignKey(f => f.UserID)
-                .OnDelete(DeleteBehavior.Cascade);
-            // Category
-            modelBuilder.Entity<Category>()
-                .HasMany(c => c.Foods)
-                .WithOne(f => f.Category)
-                .HasForeignKey(f => f.CategoryID)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            // Food
-            modelBuilder.Entity<Food>()
-                .HasOne(f => f.Category)
-                .WithMany(c => c.Foods)
-                .HasForeignKey(f => f.CategoryID)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            // Order
-            modelBuilder.Entity<Order>()
-                .HasMany(o => o.OrderUserFoods)
-                .WithOne(o => o.Order)
-                .HasForeignKey(of => of.OrderID)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<Order>()
-                .HasOne(r => r.Review)
-                .WithOne(o => o.Order)
-                .HasForeignKey<Review>(o => o.OrderId)
-                .OnDelete(DeleteBehavior.NoAction);
-            
-            // UserFood
-            modelBuilder.Entity<UserFood>()
-                .HasMany(uf => uf.OrderUserFoods)
-                .WithOne(of => of.UserFood)
-                .HasForeignKey(of => of.UserFoodID)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            // OrderUserFood
-            modelBuilder.Entity<OrderUserFood>()
-                .HasOne(of => of.Order)
-                .WithMany(o => o.OrderUserFoods)
-                .HasForeignKey(of => of.OrderID)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<OrderUserFood>()
-                .HasOne(of => of.UserFood)
-                .WithMany(uf => uf.OrderUserFoods)
-                .HasForeignKey(of => of.UserFoodID)
-                .OnDelete(DeleteBehavior.Restrict);
+            new ApplicationUserConfiguration().Configure(modelBuilder.Entity<ApplicationUser>());
+            new CategoryConfiguration().Configure(modelBuilder.Entity<Category>());
+            new FoodConfiguration().Configure(modelBuilder.Entity<Food>());
+            new OrderConfiguration().Configure(modelBuilder.Entity<Order>());
+            new OrderUserFoodConfiguration().Configure(modelBuilder.Entity<OrderUserFood>());
+            new ReviewConfiguration().Configure(modelBuilder.Entity<Review>());
+            new UserFavoriteConfiguration().Configure(modelBuilder.Entity<UserFavorite>());
+            new UserFoodConfiguration().Configure(modelBuilder.Entity<UserFood>());
+            base.OnModelCreating(modelBuilder);
 
         }
         #endregion

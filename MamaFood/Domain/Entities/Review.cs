@@ -5,18 +5,13 @@ namespace MamaFood.API.Domain.Entities
 {
     public class Review
     {
-        public int Id { get; set; }
-        [Range(1,5)]
+        public int ID { get; set; }
         public int Stars { get; set; }
         public string? Description { get; set; }
-        #region Foreign Key
-        public required string Creator { get; set; }
+        public string Creator { get; set; }
         public int OrderId { get; set; }
-        #endregion
-
-        #region Navigation property
-        public required ApplicationUser User { get; set; }
-        public required Order Order { get; set; }
-        #endregion
+        public int UserID { get; set; }
+        public ApplicationUser User { get; set; }
+        public Order Order { get; set; }
     }
 }
