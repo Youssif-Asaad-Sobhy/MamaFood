@@ -7,6 +7,9 @@ public class ApplicationUserConfiguration : IEntityTypeConfiguration<Application
     public void Configure(EntityTypeBuilder<ApplicationUser> builder)
     {
         builder.HasKey(u => u.Id);
+        builder.HasOne(u => u.UserFavorites)
+                .WithOne(uf => uf.User)
+                .HasForeignKey<UserFavorite>(uf => uf.UserID);
         // Configure other properties as needed
     }
 }
