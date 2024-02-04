@@ -6,6 +6,7 @@ namespace MamaFood.API.Domain.Entities
     public class Food
     {
         public int ID { get; set; }
+        [Required, StringLength(20), DataType(DataType.Text)]
         public string Name { get; set; }
         public byte[] Photo { get; set; }
         public int CategoryID { get; set; }

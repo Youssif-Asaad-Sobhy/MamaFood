@@ -31,14 +31,17 @@ namespace MamaFood.API.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
@@ -60,10 +63,12 @@ namespace MamaFood.API.Migrations
                         .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("NormalizedEmail")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("NormalizedUserName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
@@ -75,6 +80,7 @@ namespace MamaFood.API.Migrations
                         .HasColumnType("bit");
 
                     b.Property<byte[]>("Photo")
+                        .IsRequired()
                         .HasColumnType("varbinary(max)");
 
                     b.Property<string>("SecurityStamp")
@@ -83,12 +89,32 @@ namespace MamaFood.API.Migrations
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
+                    b.Property<int?>("UserFavoriteID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserFavoritesID")
+                        .HasColumnType("int");
+
                     b.Property<string>("UserName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("ApplicationUser");
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.HasIndex("UserFavoriteID");
+
+                    b.HasIndex("UserFavoritesID")
+                        .IsUnique();
+
+                    b.ToTable("AspNetUsers", (string)null);
                 });
 
             modelBuilder.Entity("MamaFood.API.Domain.Entities.Category", b =>
@@ -100,6 +126,7 @@ namespace MamaFood.API.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
@@ -190,18 +217,19 @@ namespace MamaFood.API.Migrations
 
             modelBuilder.Entity("MamaFood.API.Domain.Entities.Review", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
                     b.Property<string>("Creator")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<int>("OrderId")
                         .HasColumnType("int");
@@ -209,12 +237,16 @@ namespace MamaFood.API.Migrations
                     b.Property<int>("Stars")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.Property<string>("UserID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
-                    b.HasIndex("Creator");
+                    b.HasKey("ID");
 
                     b.HasIndex("OrderId")
                         .IsUnique();
+
+                    b.HasIndex("UserID");
 
                     b.ToTable("Reviews");
                 });
@@ -229,11 +261,9 @@ namespace MamaFood.API.Migrations
 
                     b.Property<string>("UserID")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
-
-                    b.HasIndex("UserID");
 
                     b.ToTable("UserFavorites");
                 });
@@ -247,6 +277,7 @@ namespace MamaFood.API.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
@@ -256,6 +287,9 @@ namespace MamaFood.API.Migrations
                     b.Property<double>("Price")
                         .HasColumnType("float");
 
+                    b.Property<int?>("UserFavoriteID")
+                        .HasColumnType("int");
+
                     b.Property<string>("UserID")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -263,6 +297,8 @@ namespace MamaFood.API.Migrations
                     b.HasKey("ID");
 
                     b.HasIndex("FoodID");
+
+                    b.HasIndex("UserFavoriteID");
 
                     b.HasIndex("UserID");
 
@@ -275,17 +311,25 @@ namespace MamaFood.API.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("NormalizedName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Roles");
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasDatabaseName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
+
+                    b.ToTable("AspNetRoles", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -303,11 +347,14 @@ namespace MamaFood.API.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RoleId")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("RoleClaims");
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetRoleClaims", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -325,11 +372,14 @@ namespace MamaFood.API.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("UserClaims");
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserClaims", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
@@ -344,11 +394,14 @@ namespace MamaFood.API.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("LoginProvider", "ProviderKey");
 
-                    b.ToTable("UserLogins");
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserLogins", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
@@ -361,7 +414,9 @@ namespace MamaFood.API.Migrations
 
                     b.HasKey("UserId", "RoleId");
 
-                    b.ToTable("UserRoles");
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetUserRoles", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -380,7 +435,22 @@ namespace MamaFood.API.Migrations
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
-                    b.ToTable("UserTokens");
+                    b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("MamaFood.API.Domain.Entities.ApplicationUser", b =>
+                {
+                    b.HasOne("MamaFood.API.Domain.Entities.UserFavorite", null)
+                        .WithMany("Users")
+                        .HasForeignKey("UserFavoriteID");
+
+                    b.HasOne("MamaFood.API.Domain.Entities.UserFavorite", "UserFavorites")
+                        .WithOne("User")
+                        .HasForeignKey("MamaFood.API.Domain.Entities.ApplicationUser", "UserFavoritesID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("UserFavorites");
                 });
 
             modelBuilder.Entity("MamaFood.API.Domain.Entities.Food", b =>
@@ -416,7 +486,7 @@ namespace MamaFood.API.Migrations
                     b.HasOne("MamaFood.API.Domain.Entities.UserFood", "UserFood")
                         .WithMany("OrderUserFoods")
                         .HasForeignKey("UserFoodID")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Order");
@@ -426,16 +496,16 @@ namespace MamaFood.API.Migrations
 
             modelBuilder.Entity("MamaFood.API.Domain.Entities.Review", b =>
                 {
-                    b.HasOne("MamaFood.API.Domain.Entities.ApplicationUser", "User")
-                        .WithMany("Reviews")
-                        .HasForeignKey("Creator")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("MamaFood.API.Domain.Entities.Order", "Order")
                         .WithOne("Review")
                         .HasForeignKey("MamaFood.API.Domain.Entities.Review", "OrderId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MamaFood.API.Domain.Entities.ApplicationUser", "User")
+                        .WithMany("Reviews")
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Order");
@@ -443,27 +513,20 @@ namespace MamaFood.API.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("MamaFood.API.Domain.Entities.UserFavorite", b =>
-                {
-                    b.HasOne("MamaFood.API.Domain.Entities.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("MamaFood.API.Domain.Entities.UserFood", b =>
                 {
                     b.HasOne("MamaFood.API.Domain.Entities.Food", "Food")
-                        .WithMany()
+                        .WithMany("UserFoods")
                         .HasForeignKey("FoodID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("MamaFood.API.Domain.Entities.UserFavorite", null)
+                        .WithMany("UserFoods")
+                        .HasForeignKey("UserFavoriteID");
+
                     b.HasOne("MamaFood.API.Domain.Entities.ApplicationUser", "User")
-                        .WithMany()
+                        .WithMany("UserFoods")
                         .HasForeignKey("UserID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -473,11 +536,64 @@ namespace MamaFood.API.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+                {
+                    b.HasOne("MamaFood.API.Domain.Entities.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+                {
+                    b.HasOne("MamaFood.API.Domain.Entities.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MamaFood.API.Domain.Entities.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+                {
+                    b.HasOne("MamaFood.API.Domain.Entities.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("MamaFood.API.Domain.Entities.ApplicationUser", b =>
                 {
                     b.Navigation("Orders");
 
                     b.Navigation("Reviews");
+
+                    b.Navigation("UserFoods");
                 });
 
             modelBuilder.Entity("MamaFood.API.Domain.Entities.Category", b =>
@@ -485,11 +601,27 @@ namespace MamaFood.API.Migrations
                     b.Navigation("Foods");
                 });
 
+            modelBuilder.Entity("MamaFood.API.Domain.Entities.Food", b =>
+                {
+                    b.Navigation("UserFoods");
+                });
+
             modelBuilder.Entity("MamaFood.API.Domain.Entities.Order", b =>
                 {
                     b.Navigation("OrderUserFoods");
 
-                    b.Navigation("Review");
+                    b.Navigation("Review")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("MamaFood.API.Domain.Entities.UserFavorite", b =>
+                {
+                    b.Navigation("User")
+                        .IsRequired();
+
+                    b.Navigation("UserFoods");
+
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("MamaFood.API.Domain.Entities.UserFood", b =>

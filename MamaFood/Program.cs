@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Serilog;
 using System.Reflection.Emit;
 using System.Text;
 
@@ -85,23 +86,44 @@ builder.Services.AddSwaggerGen(opt =>
 });
 #endregion
 
-var app = builder.Build();
+#region Logging Config
+//this variable hold all values in logging in serilog inside this variable we can use it from it
+var config = new ConfigurationBuilder()
+    .AddJsonFile("appsettings.json")
+    .Build();
 
- //ppDbInitializer.SeedUsersAndRolesAsync(app).Wait();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+Log.Logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(config)
+    .CreateLogger();
+builder.Host.UseSerilog();
+#endregion
+try
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    Log.Information("Application Starting");
+
+    var app = builder.Build();
+    // Configure the HTTP request pipeline.
+    if (app.Environment.IsDevelopment())
+    {
+        app.UseSwagger();
+        app.UseSwaggerUI();
+    }
+
+    app.UseHttpsRedirection();
+    app.UseSerilogRequestLogging();
+    app.UseAuthentication();
+
+    app.UseAuthorization();
+
+    app.MapControllers();
+
+    app.Run();
 }
-
-app.UseHttpsRedirection();
-
-app.UseAuthentication();
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.Run();
+catch (Exception ex)
+{
+    Log.Fatal(ex, "The Applicaton Falided to start");
+}
+finally
+{
+    Log.CloseAndFlush();
+}

@@ -6,7 +6,9 @@ namespace MamaFood.API.Domain.Entities
     public class Review
     {
         public int ID { get; set; }
+        [Range(1, 5), Required]
         public int Stars { get; set; }
+        [StringLength(200)]
         public string? Description { get; set; }
         public string Creator { get; set; }
         public int OrderId { get; set; }

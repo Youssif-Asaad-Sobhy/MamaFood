@@ -6,6 +6,7 @@ namespace MamaFood.API.Domain.Entities
     public class Order
     {
         public int ID { get; set; }
+        [Required, DataType(DataType.DateTime)]
         public DateTime DateTime { get; set; }
         public string UserID { get; set; }
         public Review Review { get; set; }
