@@ -170,10 +170,7 @@ namespace MamaFood.API.Migrations
             modelBuilder.Entity("MamaFood.API.Domain.Entities.Order", b =>
                 {
                     b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
                     b.Property<DateTime>("DateTime")
                         .HasColumnType("datetime2");
@@ -231,9 +228,6 @@ namespace MamaFood.API.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<int>("OrderId")
-                        .HasColumnType("int");
-
                     b.Property<int>("Stars")
                         .HasColumnType("int");
 
@@ -242,9 +236,6 @@ namespace MamaFood.API.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("ID");
-
-                    b.HasIndex("OrderId")
-                        .IsUnique();
 
                     b.HasIndex("UserID");
 
@@ -466,11 +457,19 @@ namespace MamaFood.API.Migrations
 
             modelBuilder.Entity("MamaFood.API.Domain.Entities.Order", b =>
                 {
+                    b.HasOne("MamaFood.API.Domain.Entities.Review", "Review")
+                        .WithOne("Order")
+                        .HasForeignKey("MamaFood.API.Domain.Entities.Order", "ID")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("MamaFood.API.Domain.Entities.ApplicationUser", "User")
                         .WithMany("Orders")
                         .HasForeignKey("UserID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Review");
 
                     b.Navigation("User");
                 });
@@ -480,13 +479,13 @@ namespace MamaFood.API.Migrations
                     b.HasOne("MamaFood.API.Domain.Entities.Order", "Order")
                         .WithMany("OrderUserFoods")
                         .HasForeignKey("OrderID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("MamaFood.API.Domain.Entities.UserFood", "UserFood")
                         .WithMany("OrderUserFoods")
                         .HasForeignKey("UserFoodID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Order");
@@ -496,19 +495,11 @@ namespace MamaFood.API.Migrations
 
             modelBuilder.Entity("MamaFood.API.Domain.Entities.Review", b =>
                 {
-                    b.HasOne("MamaFood.API.Domain.Entities.Order", "Order")
-                        .WithOne("Review")
-                        .HasForeignKey("MamaFood.API.Domain.Entities.Review", "OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("MamaFood.API.Domain.Entities.ApplicationUser", "User")
                         .WithMany("Reviews")
                         .HasForeignKey("UserID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Order");
 
                     b.Navigation("User");
                 });
@@ -609,8 +600,11 @@ namespace MamaFood.API.Migrations
             modelBuilder.Entity("MamaFood.API.Domain.Entities.Order", b =>
                 {
                     b.Navigation("OrderUserFoods");
+                });
 
-                    b.Navigation("Review")
+            modelBuilder.Entity("MamaFood.API.Domain.Entities.Review", b =>
+                {
+                    b.Navigation("Order")
                         .IsRequired();
                 });
 

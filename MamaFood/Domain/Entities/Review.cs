@@ -11,7 +11,6 @@ namespace MamaFood.API.Domain.Entities
         [StringLength(200)]
         public string? Description { get; set; }
         public string Creator { get; set; }
-        public int OrderId { get; set; }
         public string UserID { get; set; }
         public ApplicationUser User { get; set; }
         public Order Order { get; set; }
