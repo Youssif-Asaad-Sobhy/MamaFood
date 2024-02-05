@@ -6,6 +6,7 @@ namespace MamaFood.API.Domain.Entities
     public class OrderUserFood
     {
         public int ID { get; set; }
+        [Required, Range(1, 100)]
         public int Quantity { get; set; }
         public int UserFoodID { get; set; }
         public int OrderID { get; set; }

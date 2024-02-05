@@ -12,7 +12,8 @@ public class ReviewConfiguration : IEntityTypeConfiguration<Review>
             .HasForeignKey(r => r.UserID);
         builder.HasOne(r => r.Order)
             .WithOne(o => o.Review)
-            .HasForeignKey<Review>(r => r.OrderId);
+            .HasForeignKey<Order>(o => o.ID)
+            .OnDelete(DeleteBehavior.Restrict);
         // Configure other properties as needed
     }
 }
