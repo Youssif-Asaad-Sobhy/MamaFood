@@ -22,5 +22,6 @@ namespace MamaFood.API.Domain.Entities
         public List<Report>? Reports { get; set; }
         public List<Review>? Reviews { get; set; }
         public List<SpecialRequest>? SpecialRequests { get; set; }
+
     }
 }
