@@ -10,9 +10,9 @@ namespace MamaFood.API.Domain.Entities
         public int Stars { get; set; }
         [StringLength(200)]
         public string? Description { get; set; }
-        public string Creator { get; set; }
-        public string UserID { get; set; }
-        public ApplicationUser User { get; set; }
-        public Order Order { get; set; }
+        public required string CreatorId { get; set; }
+        public required int OrderID { get; set; }
+        public required ApplicationUser User { get; set; }
+        public required Order Order { get; set; }
     }
 }
