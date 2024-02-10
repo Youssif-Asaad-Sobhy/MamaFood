@@ -5,14 +5,19 @@ namespace MamaFood.API.Infrastructure.UnitOfWork
 {
     public interface IUnitOfWork : IDisposable
     {
-        IBaseRepository<ApplicationUser> Users {  get; }
+        IBaseRepository<ApplicationUser> Users { get; }
         IBaseRepository<Category> Categories { get; }
         IBaseRepository<Food> Foods { get; }
+        IBaseRepository<FoodCategory> FoodCategories { get; }
+        IBaseRepository<FoodOrder> FoodOrders { get; }
+        IBaseRepository<Menu> Menus { get; }
+        IBaseRepository<Offer> Offers { get; }
         IBaseRepository<Order> Orders { get; }
-        IBaseRepository<OrderUserFood> OrderUserFoods { get; }
+        IBaseRepository<Report> Reports { get; }
         IBaseRepository<Review> Reviews { get; }
-        IBaseRepository<UserFavorite> UserFavorites { get; }
-        IBaseRepository<UserFood> UserFoods { get; }
+        IBaseRepository<SpecialRequest> SpecialRequests { get; }
+        IBaseRepository<UserLikeFood> UserLikeFoods { get; }
+        IBaseRepository<UserLikeUser> UserLikeUsers { get; }
         int Complete();
     }
 }

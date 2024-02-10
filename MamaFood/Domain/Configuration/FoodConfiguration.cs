@@ -1,15 +1,26 @@
-﻿using MamaFood.API.Domain.Entities;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.EntityFrameworkCore;
+using MamaFood.API.Domain.Entities;
 
 public class FoodConfiguration : IEntityTypeConfiguration<Food>
 {
     public void Configure(EntityTypeBuilder<Food> builder)
     {
+        // Configure primary key
         builder.HasKey(f => f.ID);
-        builder.HasOne(f => f.Category)
-            .WithMany(c => c.Foods)
-            .HasForeignKey(f => f.CategoryID);
-        // Configure other properties as needed
+
+        // Configure properties
+        builder.Property(f => f.Name)
+            .IsRequired()
+            .HasMaxLength(20);
+
+        // Configure relationships
+        builder.HasOne(f => f.Menu)
+            .WithMany(m => m.Foods)
+            .HasForeignKey(f => f.MenuID);
+        
+        builder.HasMany(f => f.Orders)
+            .WithMany(o => o.Foods)
+            .UsingEntity<FoodOrder>();
     }
 }

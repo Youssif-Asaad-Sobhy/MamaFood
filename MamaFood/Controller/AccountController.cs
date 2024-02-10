@@ -59,7 +59,7 @@ namespace MamaFood.API.Controller
             return token;
         }
         [HttpPost("Register")]
-        public async Task<IActionResult>Register([FromBody] ResgisterUseDTO Model)
+        /*public async Task<IActionResult>Register([FromBody] ResgisterUseDTO Model)
         {
             if (await _userManager.FindByNameAsync(Model.UserName) != null)
                 return StatusCode(StatusCodes.Status400BadRequest, new { status = "Error", Message = "User Name Already Exist" });
@@ -81,7 +81,7 @@ namespace MamaFood.API.Controller
               new{status = "Success", Message = $"Account Created Successfully \nWelcome{Model.UserName}\n",
               Token = new JwtSecurityTokenHandler().WriteToken(token),
                   expiration = DateTime.Now.AddMinutes(20)});
-        }
+        }*/
 
         [HttpPost("LogIn")]
         public async Task<IActionResult> LogIn([FromBody] LogInUserDTO Model)
