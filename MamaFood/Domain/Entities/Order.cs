@@ -11,9 +11,9 @@ namespace MamaFood.API.Domain.Entities
         public int Duration { get; set;}
         public int TotalPrice { get; set;}
         public required string UserId { get; set; }
+        public Review? Review { get; set; }
+        public SpecialRequest? SpecialRequest { get; set; }
         public required ApplicationUser User { get; set; }
         public required List<Food> Foods { get; set; }
-        public SpecialRequest? SpecialRequest { get; set; }
-        public Review? Review { get; set; }
     }
 }

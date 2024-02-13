@@ -11,6 +11,5 @@
         public required ApplicationUser User { get; set; }
         public required SpecialRequest SpecialRequest { get; set;}
 
-
     }
 }

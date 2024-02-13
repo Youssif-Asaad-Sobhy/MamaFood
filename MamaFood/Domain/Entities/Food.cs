@@ -9,10 +9,10 @@ namespace MamaFood.API.Domain.Entities
         [Required, StringLength(20), DataType(DataType.Text)]
         public required string Name { get; set; }
         public byte[]? Photo { get; set; }
-
-        public List<ApplicationUser>? Users { get; set; }
-        public List<Order>? Orders { get; set; }
+        public required int MenuID { get; set; }
         public required Menu Menu { get; set; }
-        public required Category Category { get; set; }
+        public List<Order>? Orders { get; set; }
+        public List<ApplicationUser>? Users { get; set; }
+        public required List<Category> Categories { get; set; }
     }
 }
